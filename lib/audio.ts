@@ -88,7 +88,7 @@ class AudioEngine {
       comp.attack.value = 0.003;
       comp.release.value = 0.2;
       this.master = ctx.createGain();
-      this.master.gain.value = 0.9;
+      this.master.gain.value = 1.0;
       this.master.connect(comp).connect(ctx.destination);
 
       this.reverb = ctx.createConvolver();
@@ -154,8 +154,8 @@ class AudioEngine {
   private applyVolumes() {
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
-    this.musicBus.gain.setTargetAtTime(this.settings.music * 0.5, t, 0.05);
-    this.sfxBus.gain.setTargetAtTime(this.settings.sfx, t, 0.05);
+    this.musicBus.gain.setTargetAtTime(this.settings.music * 0.58, t, 0.05);
+    this.sfxBus.gain.setTargetAtTime(this.settings.sfx * 1.15, t, 0.05);
   }
 
   /** Muffle the music (pause menus, results). */
