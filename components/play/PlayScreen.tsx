@@ -239,9 +239,13 @@ export function PlayScreen({
     }
     if (mode === "tutorial" && success) store.update((s) => void (s.tutorialDone = true));
 
+    // the sync below can finish before the modal shows; whichever lands second merges both
+    let synced: Pick<RunResult, "runId" | "rank" | "fullRank" | "pending"> | null = null;
+    let shown = false;
     setTimeout(() => {
+      shown = true;
       audio.duck(true);
-      setResult({ ...base });
+      setResult({ ...base, ...synced });
       setPhase("done");
     }, success ? 900 : 1100);
 
@@ -267,7 +271,8 @@ export function PlayScreen({
       ]);
     }
     session.refresh();
-    setResult((r) => (r ? { ...r, runId, rank, fullRank, pending: false } : { ...base, runId, rank, fullRank, pending: false }));
+    synced = { runId, rank, fullRank, pending: false };
+    if (shown) setResult((r) => ({ ...(r ?? base), ...synced }));
   }, [mode, replay, record.bestMs, onVerified, dungeon, daily, challenge, setPhase, session]);
 
   // ---------- event → audio ----------

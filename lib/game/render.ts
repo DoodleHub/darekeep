@@ -1001,7 +1001,8 @@ export class Renderer {
     if (p.moving) {
       if (side) {
         const fr = Math.floor(p.walk * 2) % 8;
-        this.spr(`player_side_${fr}` as SpriteName, x, y + 0.38, { ...base, h: H * 0.96, flip: fx > 0 });
+        // Atlas frames 0–3 face left, 4–7 face right.
+        this.spr(`player_side_${fr}` as SpriteName, x, y + 0.38, { ...base, h: H * 0.96, flip: fr < 4 ? fx > 0 : fx < 0 });
       } else {
         const fr = Math.floor(p.walk * 1.4) % 4;
         this.spr(`player_${fy > 0 ? "down" : "up"}_${fr}` as SpriteName, x, y + 0.38, { ...base, h: H });
