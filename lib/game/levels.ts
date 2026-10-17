@@ -1,0 +1,405 @@
+import { fromAscii } from "./dungeon";
+import type { Difficulty, Dungeon, Layout } from "./types";
+
+interface Def {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: Difficulty;
+  theme?: number;
+  rows: string[];
+  launchers?: Record<string, number>;
+}
+
+const make = (kind: Dungeon["kind"]) => (d: Def): Dungeon => ({
+  id: d.id,
+  versionId: `${d.id}-v1`,
+  title: d.title,
+  description: d.description,
+  creator: "Darekeep",
+  kind,
+  difficulty: d.difficulty,
+  layout: fromAscii(d.rows, d.theme ?? 0, d.launchers) as Layout,
+});
+
+export const TUTORIAL: Dungeon = make("tutorial")({
+  id: "tutorial",
+  title: "First Steps",
+  description: "Learn to move, fight, roll and escape.",
+  difficulty: "Easy",
+  rows: [
+    "................",
+    ".S...T..........",
+    "................",
+    "######.#########",
+    "........s.......",
+    "..T.........s...",
+    "t..............t",
+    "#########.######",
+    "...........1....",
+    ".K.........1..E.",
+    "...........1..T.",
+    "...........1....",
+  ],
+});
+
+export const ADVENTURE: Dungeon[] = ([
+  {
+    id: "c01",
+    title: "Slime Cellar",
+    description: "Wobbly friends, big swings. A gentle warm-up.",
+    difficulty: "Easy",
+    rows: [
+      "................",
+      ".S..#......s....",
+      "....#...........",
+      "....#..T...##...",
+      "....#.......#.s.",
+      ".......s....#...",
+      "..T.........#.K.",
+      "....###.....#...",
+      "......#.........",
+      ".s....#.....s...",
+      "......#.T.....E.",
+      "t..............t",
+    ],
+  },
+  {
+    id: "c02",
+    title: "Archer's Hall",
+    description: "Watch the aim line. Roll when it turns red.",
+    difficulty: "Easy",
+    rows: [
+      "..........#.....",
+      ".S........#..k..",
+      "..........#.....",
+      "...####.......T.",
+      "................",
+      "..k.....##......",
+      "........##...K..",
+      "..T.............",
+      "....#.......####",
+      "....#..k........",
+      "....#.....T...E.",
+      "t...............",
+    ],
+  },
+  {
+    id: "c03",
+    title: "Spike Garden",
+    description: "Every gap has teeth. Learn the rhythm.",
+    difficulty: "Medium",
+    theme: 1,
+    rows: [
+      "................",
+      ".S.....T........",
+      "................",
+      "####0######1####",
+      "...............<",
+      "......s.....T...",
+      "................",
+      "####2####3######",
+      ">...............",
+      "..K.........s...",
+      "...............E",
+      ".T..............",
+    ],
+    launchers: { "15,4": 0, "0,8": 2 },
+  },
+  {
+    id: "c04",
+    title: "Bull Pen",
+    description: "Chargers can't turn. Let the pillars do the work.",
+    difficulty: "Medium",
+    rows: [
+      "................",
+      ".S..............",
+      "................",
+      "...##.....##....",
+      "...##..c..##..T.",
+      "................",
+      ".T....##...c....",
+      "......##........",
+      "...c......##....",
+      "..........##..K.",
+      "..T.............",
+      "............E...",
+    ],
+  },
+  {
+    id: "c05",
+    title: "Lever Lock",
+    description: "Two levers, two gates, one very guarded key.",
+    difficulty: "Medium",
+    theme: 2,
+    rows: [
+      ".......#........",
+      ".S.....#....T...",
+      ".......#......M.",
+      "...T...#...k....",
+      ".......#........",
+      ".......l....c...",
+      ".......#........",
+      "..s....#........",
+      ".......#..###...",
+      ".L.....#..#K#.E.",
+      "..s..T.#..#m#...",
+      ".......#........",
+    ],
+  },
+  {
+    id: "c06",
+    title: "Crossfire",
+    description: "Darts fall in waves. Find the beat, then run.",
+    difficulty: "Medium",
+    rows: [
+      "...v...v...v....",
+      "................",
+      "..T...........s.",
+      "........k.....K.",
+      "................",
+      "######.....#####",
+      "................",
+      ".....T..s...T...",
+      "................",
+      "..........##....",
+      ".S........#E....",
+      "..........#.....",
+    ],
+    launchers: { "3,0": 0, "7,0": 1, "11,0": 2 },
+  },
+  {
+    id: "c07",
+    title: "Slime Swarm",
+    description: "Seven slimes. One sword. Keep moving.",
+    difficulty: "Medium",
+    theme: 1,
+    rows: [
+      "................",
+      ".S......s.......",
+      "..........s.....",
+      "...##.......##..",
+      "...#..T..s...#..",
+      "......s....s....",
+      ".s...........T..",
+      "...#...s.....#..",
+      "...##.......##..",
+      "......T.........",
+      "..........K.....",
+      ".............E..",
+    ],
+  },
+  {
+    id: "c08",
+    title: "Charger Corridors",
+    description: "Narrow halls, angry bulls. Bait, sidestep, strike.",
+    difficulty: "Hard",
+    rows: [
+      "................",
+      ".S..#......#....",
+      "....#..c...#..T.",
+      "....#......#....",
+      "....###..###....",
+      "c..............c",
+      "....###..###....",
+      "....#......#....",
+      ".T..#......#....",
+      "....#..c...#..K.",
+      "....#......#....",
+      "...........T..E.",
+    ],
+  },
+  {
+    id: "c09",
+    title: "Gatekeeper",
+    description: "The shortcut is yours if you can reach the lever.",
+    difficulty: "Hard",
+    theme: 2,
+    rows: [
+      "................",
+      ".S....#.....M...",
+      "......#.........",
+      "..T...#..k......",
+      "......#.........",
+      "###l###.....####",
+      "...........#....",
+      ".L.....s...m..T.",
+      "...........#....",
+      "####.#######....",
+      "..............E.",
+      "..T.....K..0123.",
+    ],
+  },
+  {
+    id: "c10",
+    title: "Darekeep",
+    description: "Everything you've learned, all at once.",
+    difficulty: "Expert",
+    theme: 3,
+    rows: [
+      "..k..........k..",
+      "................",
+      "..###..##..###..",
+      "..#T........T#..",
+      "..#....c.....#..",
+      "......0..2......",
+      ".S....1.T3....E.",
+      "......2..0......",
+      "..#..........#..",
+      "..#....c.....#..",
+      "..###..##..###..",
+      "..s....K.....s..",
+    ],
+  },
+] as Def[]).map(make("curated"));
+
+export const DAILY_POOL: Dungeon[] = ([
+  {
+    id: "d01",
+    title: "Morning Dash",
+    description: "Wide open and wide awake. Pure speed.",
+    difficulty: "Easy",
+    rows: [
+      "................",
+      ".S.......s......",
+      "................",
+      "....#.....#.....",
+      "....#..T..#..T..",
+      "....#.....#.....",
+      "....#..k..#.....",
+      "................",
+      "..T......s......",
+      "................",
+      "..........K..E..",
+      "t..............t",
+    ],
+  },
+  {
+    id: "d02",
+    title: "Pillar Dance",
+    description: "Make the bulls kiss the stone.",
+    difficulty: "Medium",
+    theme: 1,
+    rows: [
+      "................",
+      ".S..............",
+      "................",
+      "....#...#...#...",
+      "..T.....c.......",
+      "....#...#...#...",
+      "................",
+      "....#...#...#.T.",
+      "..c.........c...",
+      "....#...#...#...",
+      "...T............",
+      "........K....E..",
+    ],
+  },
+  {
+    id: "d03",
+    title: "Arrow Rain",
+    description: "Bones up top, darts below. Stay unpredictable.",
+    difficulty: "Hard",
+    rows: [
+      "k..............k",
+      "................",
+      "....T......T....",
+      "................",
+      ">.......#.......",
+      "........#.......",
+      "........#......<",
+      "................",
+      "..##........##..",
+      "..#..........#..",
+      "..#.S..T...K.#E.",
+      "................",
+    ],
+    launchers: { "0,4": 0, "15,6": 2 },
+  },
+  {
+    id: "d04",
+    title: "Slime Time",
+    description: "Squish 'em or skip 'em. The clock is ticking.",
+    difficulty: "Easy",
+    theme: 1,
+    rows: [
+      "................",
+      ".S.....#........",
+      ".......#..s..T..",
+      ".......#........",
+      "...s...#...s....",
+      ".......#........",
+      ".T.........s....",
+      "........#.......",
+      "....s...#....s..",
+      "........#.......",
+      "..K.....#..T..E.",
+      "................",
+    ],
+  },
+  {
+    id: "d05",
+    title: "Lever Loop",
+    description: "Pull, run, pull again.",
+    difficulty: "Medium",
+    theme: 2,
+    rows: [
+      "................",
+      ".S..#..L....#...",
+      "....#.......#.M.",
+      "....l.......#.T.",
+      "....#..s....#...",
+      "#####.......####",
+      "..T.........#...",
+      ".......k....#...",
+      "##m##.......#.T.",
+      "............#...",
+      "..K.........m.E.",
+      "............#...",
+    ],
+  },
+  {
+    id: "d06",
+    title: "Needle Maze",
+    description: "Read the flashes. Trust the roll.",
+    difficulty: "Hard",
+    theme: 3,
+    rows: [
+      "................",
+      ".S....#.........",
+      "......#..T......",
+      "......0.........",
+      "......#....###1#",
+      "###2###....#....",
+      "...........#..T.",
+      "..s........3....",
+      "......######....",
+      "..T...#.....0...",
+      "......1..K..#.E.",
+      "......#.....#...",
+    ],
+  },
+] as Def[]).map(make("daily"));
+
+export const CURATED: Dungeon[] = [TUTORIAL, ...ADVENTURE, ...DAILY_POOL];
+
+export function findCurated(versionOrId: string) {
+  return CURATED.find((d) => d.versionId === versionOrId || d.id === versionOrId);
+}
+
+/** Days since epoch (UTC). The daily challenge rolls over at 00:00 UTC. */
+export function utcDay(now = Date.now()) {
+  return Math.floor(now / 86_400_000);
+}
+
+export function utcDateString(now = Date.now()) {
+  return new Date(utcDay(now) * 86_400_000).toISOString().slice(0, 10);
+}
+
+export function dailyDungeon(now = Date.now()) {
+  return DAILY_POOL[utcDay(now) % DAILY_POOL.length];
+}
+
+export function msUntilNextDaily(now = Date.now()) {
+  return (utcDay(now) + 1) * 86_400_000 - now;
+}
